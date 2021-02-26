@@ -49,29 +49,30 @@ namespace Helsinki2017
         public static List<Versenyzo> RovidProgramBeolvas()
         {
             var lista = new List<Versenyzo>();
-            StreamReader sr = new StreamReader("rovidprogram.csv", Encoding.UTF8);
-            sr.ReadLine();
-            while (!sr.EndOfStream)
-                lista.Add(new Versenyzo(sr.ReadLine()));
-            sr.Close();
+            using (StreamReader sr = new StreamReader("rovidprogram.csv", Encoding.UTF8))
+            {
+                sr.ReadLine();
+                while (!sr.EndOfStream)
+                    lista.Add(new Versenyzo(sr.ReadLine()));
+            }
             return lista;
         }
 
         public static List<Versenyzo> KurBeolvasas(List<Versenyzo> lista)
         {
-            StreamReader sr = new StreamReader("donto.csv", Encoding.UTF8);
-            sr.ReadLine();
-            while (!sr.EndOfStream)
-            {
-                string sor = sr.ReadLine();
-                var a = sor.Split(';');
-                Versenyzo versenyzo = lista.Where(v => v.Nev == a[0]).FirstOrDefault();
-                versenyzo.KurTech = Convert.ToDouble(a[2].Replace(".", TizedesElvalaszto));
-                versenyzo.KurKomp = Convert.ToDouble(a[2].Replace(".", TizedesElvalaszto));
-                versenyzo.KurLevonas = Convert.ToInt32(a[4]);
-                versenyzo.Donto = true;
+            using (StreamReader sr = new StreamReader("donto.csv", Encoding.UTF8)) {
+                sr.ReadLine();
+                while (!sr.EndOfStream)
+                {
+                    string sor = sr.ReadLine();
+                    var a = sor.Split(';');
+                    Versenyzo versenyzo = lista.Where(v => v.Nev == a[0]).FirstOrDefault();
+                    versenyzo.KurTech = Convert.ToDouble(a[2].Replace(".", TizedesElvalaszto));
+                    versenyzo.KurKomp = Convert.ToDouble(a[2].Replace(".", TizedesElvalaszto));
+                    versenyzo.KurLevonas = Convert.ToInt32(a[4]);
+                    versenyzo.Donto = true;
+                }
             }
-            sr.Close();
             return lista;
         }
 
